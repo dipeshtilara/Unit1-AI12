@@ -1,14 +1,28 @@
-from flask import Flask, send_file
-import os
+import streamlit as st
+import streamlit.components.v1 as components
 
-app = Flask(__name__)
+# Configure the Streamlit page layout
+st.set_page_config(
+    page_title="Data Science Methodology", 
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
 
-@app.route('/')
-def home():
-    # Return the HTML file directly
-    return send_file('data_science_methodology.html')
+# Remove Streamlit's default padding so the HTML can take up maximum space
+st.markdown("""
+    <style>
+        .block-container {
+            padding-top: 0rem;
+            padding-bottom: 0rem;
+            padding-left: 0rem;
+            padding-right: 0rem;
+        }
+    </style>
+""", unsafe_allow_html=True)
 
-if __name__ == '__main__':
-    # Use the PORT environment variable if available (e.g., for Render/Heroku), otherwise default to 5000
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+# Read the HTML content
+with open("data_science_methodology.html", "r", encoding="utf-8") as file:
+    source_html = file.read()
+
+# Display the custom HTML in Streamlit
+components.html(source_html, height=1000, scrolling=True)
