@@ -1,0 +1,1876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Science Methodology — Class XII</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e1a;
+  --surface: #111827;
+  --surface2: #1a2235;
+  --border: rgba(255,255,255,0.08);
+  --text: #e8edf7;
+  --muted: #8899bb;
+  --accent1: #4f8ef7;
+  --accent2: #a855f7;
+  --accent3: #22d3ee;
+  --accent4: #f59e0b;
+  --accent5: #10b981;
+  --danger: #ef4444;
+  --glow1: rgba(79,142,247,0.15);
+  --glow2: rgba(168,85,247,0.15);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(10,14,26,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 60px;
+}
+.nav-brand { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; color: var(--accent1); letter-spacing: -0.02em; }
+.nav-links { display: flex; gap: 0.25rem; }
+.nav-links a {
+  color: var(--muted); text-decoration: none; font-size: 0.78rem; font-weight: 500;
+  padding: 0.35rem 0.75rem; border-radius: 6px; transition: all 0.2s; white-space: nowrap;
+}
+.nav-links a:hover { background: var(--surface); color: var(--text); }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center; flex-direction: column;
+  text-align: center;
+  padding: 80px 2rem 4rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(79,142,247,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79,142,247,0.06) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: gridPulse 8s ease-in-out infinite;
+}
+@keyframes gridPulse { 0%,100%{opacity:0.6} 50%{opacity:1} }
+
+.hero-orb {
+  position: absolute; border-radius: 50%;
+  filter: blur(80px); animation: orbFloat 12s ease-in-out infinite;
+  pointer-events: none;
+}
+.orb1 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(79,142,247,0.2), transparent); top: -100px; left: -100px; }
+.orb2 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(168,85,247,0.2), transparent); bottom: -100px; right: -100px; animation-delay: -6s; }
+@keyframes orbFloat { 0%,100%{transform:translate(0,0)} 50%{transform:translate(30px,-30px)} }
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: rgba(79,142,247,0.1); border: 1px solid rgba(79,142,247,0.3);
+  padding: 0.4rem 1rem; border-radius: 99px; font-size: 0.78rem; color: var(--accent1);
+  margin-bottom: 1.5rem; animation: fadeUp 0.6s ease both;
+}
+.badge-dot { width:6px; height:6px; border-radius:50%; background:var(--accent1); animation: blink 2s ease infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.hero h1 {
+  font-family: 'Syne', sans-serif; font-size: clamp(2.4rem,6vw,4.5rem); font-weight: 800;
+  letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 1rem;
+  animation: fadeUp 0.6s 0.1s ease both;
+}
+.hero h1 span { 
+  background: linear-gradient(135deg, var(--accent1), var(--accent2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+}
+.hero p {
+  font-size: 1.1rem; color: var(--muted); max-width: 600px;
+  animation: fadeUp 0.6s 0.2s ease both; margin-bottom: 2.5rem;
+}
+.hero-stats {
+  display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center;
+  animation: fadeUp 0.6s 0.3s ease both;
+}
+.hero-stat { text-align: center; }
+.hero-stat strong { display: block; font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; color: var(--accent1); }
+.hero-stat span { font-size: 0.78rem; color: var(--muted); }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+/* SECTIONS */
+section { padding: 5rem 2rem; }
+.container { max-width: 1100px; margin: 0 auto; }
+
+.section-label {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+  color: var(--accent1); text-transform: uppercase; letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+.section-label::before { content:''; width:24px; height:2px; background:var(--accent1); }
+
+.section-title {
+  font-family: 'Syne', sans-serif; font-size: clamp(1.8rem,4vw,2.8rem);
+  font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 1rem;
+}
+.section-desc { color: var(--muted); max-width: 650px; margin-bottom: 3rem; }
+
+/* CARDS */
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 1.75rem;
+  transition: all 0.3s; position: relative; overflow: hidden;
+}
+.card:hover { border-color: rgba(79,142,247,0.3); transform: translateY(-3px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+.card::before { content:''; position:absolute; inset:0; background: linear-gradient(135deg, rgba(79,142,247,0.04), transparent); opacity:0; transition:opacity 0.3s; pointer-events:none; }
+.card:hover::before { opacity:1; }
+
+/* ============================
+   MODULE 1: PIPELINE
+   ============================ */
+#pipeline { background: linear-gradient(180deg, var(--bg) 0%, #0d1220 100%); }
+
+.pipeline-flow {
+  display: flex; align-items: stretch; gap: 0;
+  overflow-x: auto; padding: 1rem 0 2rem;
+  -webkit-overflow-scrolling: touch;
+}
+.pipeline-step {
+  flex: 1; min-width: 140px;
+  display: flex; flex-direction: column;
+  position: relative;
+}
+.pipeline-step:not(:last-child)::after {
+  content:'→';
+  position: absolute; right: -14px; top: 50%; transform: translateY(-90%);
+  color: var(--muted); font-size: 1.4rem; z-index: 2;
+}
+.step-box {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 1.25rem; text-align: center;
+  margin: 0 16px; flex: 1;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+.step-box:hover { transform: translateY(-6px); }
+.step-num {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+  color: var(--muted); margin-bottom: 0.5rem;
+}
+.step-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+.step-name {
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem;
+  line-height: 1.3;
+}
+.step-sub { font-size: 0.72rem; color: var(--muted); margin-top: 0.25rem; }
+
+/* Color each step */
+.s1 .step-box { border-color: rgba(79,142,247,0.4); background: linear-gradient(135deg, rgba(79,142,247,0.08), var(--surface)); }
+.s2 .step-box { border-color: rgba(168,85,247,0.4); background: linear-gradient(135deg, rgba(168,85,247,0.08), var(--surface)); }
+.s3 .step-box { border-color: rgba(34,211,238,0.4); background: linear-gradient(135deg, rgba(34,211,238,0.08), var(--surface)); }
+.s4 .step-box { border-color: rgba(245,158,11,0.4); background: linear-gradient(135deg, rgba(245,158,11,0.08), var(--surface)); }
+.s5 .step-box { border-color: rgba(16,185,129,0.4); background: linear-gradient(135deg, rgba(16,185,129,0.08), var(--surface)); }
+.s6 .step-box { border-color: rgba(239,68,68,0.4); background: linear-gradient(135deg, rgba(239,68,68,0.08), var(--surface)); }
+.s7 .step-box { border-color: rgba(249,115,22,0.4); background: linear-gradient(135deg, rgba(249,115,22,0.08), var(--surface)); }
+.s8 .step-box { border-color: rgba(236,72,153,0.4); background: linear-gradient(135deg, rgba(236,72,153,0.08), var(--surface)); }
+.s9 .step-box { border-color: rgba(99,102,241,0.4); background: linear-gradient(135deg, rgba(99,102,241,0.08), var(--surface)); }
+.s10 .step-box { border-color: rgba(20,184,166,0.4); background: linear-gradient(135deg, rgba(20,184,166,0.08), var(--surface)); }
+
+/* Modules row */
+.modules-strip {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem;
+  margin-top: 3rem;
+}
+.module-card {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 1.25rem; text-align: center;
+  position: relative; overflow: hidden;
+}
+.module-card::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+}
+.m1::after { background: linear-gradient(90deg, var(--accent1), var(--accent2)); }
+.m2::after { background: linear-gradient(90deg, var(--accent2), var(--accent3)); }
+.m3::after { background: linear-gradient(90deg, var(--accent3), var(--accent4)); }
+.m4::after { background: linear-gradient(90deg, var(--accent4), var(--accent5)); }
+.m5::after { background: linear-gradient(90deg, var(--accent5), var(--accent1)); }
+.module-title { font-family:'Syne',sans-serif; font-weight:700; font-size:0.82rem; margin-bottom:0.4rem; }
+.module-steps { font-size:0.7rem; color:var(--muted); font-family:'JetBrains Mono',monospace; }
+
+/* ============================
+   MODULE 2: ANALYTICS TYPES
+   ============================ */
+#analytics { background: var(--bg); }
+
+.analytics-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;
+}
+@media(max-width:640px) { .analytics-grid { grid-template-columns: 1fr; } }
+
+.analytics-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 2rem; position: relative; overflow: hidden;
+  cursor: pointer; transition: all 0.3s;
+}
+.analytics-card:hover { transform: translateY(-4px); }
+.ac-stripe {
+  position: absolute; top:0; left:0; right:0; height:4px;
+}
+.ac1 .ac-stripe { background: linear-gradient(90deg, #4f8ef7, #60a5fa); }
+.ac2 .ac-stripe { background: linear-gradient(90deg, #a855f7, #c084fc); }
+.ac3 .ac-stripe { background: linear-gradient(90deg, #f59e0b, #fcd34d); }
+.ac4 .ac-stripe { background: linear-gradient(90deg, #10b981, #34d399); }
+
+.ac-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+.ac-icon { font-size: 2.2rem; }
+.ac-meta {}
+.ac-type { font-size: 0.7rem; font-family:'JetBrains Mono',monospace; color:var(--muted); text-transform: uppercase; letter-spacing:0.08em; }
+.ac-name { font-family:'Syne',sans-serif; font-weight:800; font-size:1.2rem; }
+.ac-question { 
+  display: inline-block; background: rgba(255,255,255,0.06); 
+  border-radius: 6px; padding: 0.25rem 0.75rem; font-size: 0.78rem;
+  color: var(--muted); margin-bottom: 0.75rem; font-style: italic;
+}
+.ac-desc { font-size: 0.9rem; color: var(--muted); margin-bottom: 1rem; }
+.ac-tools { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.tag {
+  background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+  padding: 0.2rem 0.65rem; border-radius: 99px; font-size: 0.72rem; color: var(--muted);
+}
+.ac-example {
+  margin-top: 1rem; padding: 0.85rem; background: rgba(255,255,255,0.04);
+  border-left: 3px solid; border-radius: 0 8px 8px 0; font-size: 0.85rem;
+}
+.ac1 .ac-example { border-color: #4f8ef7; }
+.ac2 .ac-example { border-color: #a855f7; }
+.ac3 .ac-example { border-color: #f59e0b; }
+.ac4 .ac-example { border-color: #10b981; }
+.example-label { font-size: 0.68rem; font-family:'JetBrains Mono',monospace; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.25rem; }
+
+/* Analytics progression visual */
+.analytics-progression {
+  margin-top: 3rem;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem;
+}
+.prog-title { font-family:'Syne',sans-serif; font-weight:700; margin-bottom:1.5rem; text-align:center; }
+.prog-bar-wrap { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+.prog-label { min-width: 160px; font-size: 0.82rem; font-weight: 500; }
+.prog-track { flex:1; height: 10px; background: rgba(255,255,255,0.06); border-radius: 99px; overflow: hidden; }
+.prog-fill {
+  height: 100%; border-radius: 99px;
+  animation: growBar 1.5s ease both;
+  animation-play-state: paused;
+}
+.prog-fill.animated { animation-play-state: running; }
+@keyframes growBar { from{width:0} }
+.pb1 { background: linear-gradient(90deg,#4f8ef7,#60a5fa); width:25%; }
+.pb2 { background: linear-gradient(90deg,#a855f7,#c084fc); width:50%; }
+.pb3 { background: linear-gradient(90deg,#f59e0b,#fcd34d); width:75%; }
+.pb4 { background: linear-gradient(90deg,#10b981,#34d399); width:100%; }
+.prog-val { min-width: 40px; font-size:0.78rem; color:var(--muted); font-family:'JetBrains Mono',monospace; }
+
+/* ============================
+   DATA COLLECTION
+   ============================ */
+#collection { background: linear-gradient(180deg, #0a0e1a 0%, #0d1220 100%); }
+
+.data-sources {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+@media(max-width:720px) { .data-sources { grid-template-columns: 1fr; } }
+
+.source-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem;
+  position: relative; overflow: hidden;
+}
+.source-badge {
+  display: inline-block; padding: 0.25rem 0.75rem; border-radius: 99px;
+  font-size: 0.7rem; font-weight: 600; margin-bottom: 1rem;
+  font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.06em;
+}
+.primary-badge { background: rgba(79,142,247,0.15); color: var(--accent1); }
+.secondary-badge { background: rgba(168,85,247,0.15); color: var(--accent2); }
+.mixed-badge { background: rgba(16,185,129,0.15); color: var(--accent5); }
+
+.source-title { font-family:'Syne',sans-serif; font-weight:700; font-size:1.1rem; margin-bottom:0.75rem; }
+.source-list { list-style: none; }
+.source-list li { 
+  font-size: 0.85rem; color: var(--muted); padding: 0.4rem 0;
+  border-bottom: 1px solid var(--border); display: flex; gap: 0.5rem; align-items: center;
+}
+.source-list li:last-child { border-bottom: none; }
+.source-list li::before { content:'↳'; color:var(--accent1); font-size:0.7rem; flex-shrink:0; }
+
+/* Data collection methods wheel */
+.methods-ring {
+  display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;
+  margin-top: 2rem;
+}
+.method-pill {
+  display: flex; align-items: center; gap: 0.6rem;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 99px; padding: 0.5rem 1.1rem; font-size: 0.82rem;
+  transition: all 0.3s;
+}
+.method-pill:hover { border-color: var(--accent1); color: var(--accent1); transform: scale(1.05); }
+.method-num { 
+  width: 22px; height: 22px; background: var(--accent1); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; font-weight: 700; color: #000; font-family: 'JetBrains Mono', monospace;
+}
+
+/* ============================
+   DATA PREPARATION
+   ============================ */
+#preparation { background: var(--bg); }
+
+.prep-steps {
+  display: flex; flex-direction: column; gap: 1.25rem;
+}
+.prep-step {
+  display: flex; align-items: flex-start; gap: 1.5rem;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem;
+  transition: all 0.3s; position: relative;
+}
+.prep-step:hover { border-color: rgba(79,142,247,0.3); }
+.prep-step-num {
+  width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 0.85rem;
+}
+.pn1 { background: rgba(79,142,247,0.15); color: var(--accent1); }
+.pn2 { background: rgba(168,85,247,0.15); color: var(--accent2); }
+.pn3 { background: rgba(34,211,238,0.15); color: var(--accent3); }
+.pn4 { background: rgba(245,158,11,0.15); color: var(--accent4); }
+.prep-step-content {}
+.prep-step-title { font-family:'Syne',sans-serif; font-weight:700; margin-bottom:0.35rem; }
+.prep-step-desc { font-size:0.88rem; color:var(--muted); }
+.prep-connector {
+  width: 2px; height: 20px; background: var(--border); margin-left: 1.5rem;
+}
+
+/* Feature engineering formula */
+.formula-box {
+  background: var(--surface2); border: 1px solid rgba(245,158,11,0.3);
+  border-radius: 12px; padding: 1.5rem; margin-top: 2rem; font-family: 'JetBrains Mono', monospace;
+}
+.formula-title { font-size: 0.75rem; color: var(--accent4); text-transform: uppercase; letter-spacing:0.08em; margin-bottom:1rem; }
+.formula-eq { font-size: 0.9rem; color: var(--text); line-height: 2; }
+.formula-eq span { color: var(--accent4); }
+
+/* ============================
+   MODEL VALIDATION
+   ============================ */
+#validation { background: linear-gradient(180deg, #0a0e1a, #0d1220); }
+
+.validation-compare {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;
+}
+@media(max-width:640px) { .validation-compare { grid-template-columns: 1fr; } }
+
+.vc-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem;
+}
+.vc-badge {
+  display: inline-block; padding: 0.25rem 0.75rem; border-radius: 6px;
+  font-size: 0.72rem; font-family:'JetBrains Mono',monospace; text-transform: uppercase;
+  margin-bottom: 1rem; font-weight: 600;
+}
+.tts-badge { background: rgba(79,142,247,0.15); color: var(--accent1); }
+.cv-badge { background: rgba(168,85,247,0.15); color: var(--accent2); }
+.vc-title { font-family:'Syne',sans-serif; font-weight:700; font-size:1.1rem; margin-bottom:0.75rem; }
+.vc-pros { list-style: none; margin-top: 1rem; }
+.vc-pros li { font-size:0.84rem; color:var(--muted); padding:0.3rem 0; display:flex; gap:0.5rem; }
+.vc-pros li::before { color:var(--accent5); }
+.vc-pros li.pro::before { content:'✓'; color:var(--accent5); }
+.vc-pros li.con::before { content:'✗'; color:var(--danger); }
+
+/* K-Fold visual */
+.kfold-visual {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem;
+  margin-top: 1.5rem;
+}
+.kfold-title { font-family:'Syne',sans-serif; font-weight:700; margin-bottom:1.5rem; }
+.kfold-grid { display: flex; flex-direction: column; gap: 0.6rem; }
+.kfold-row { display: flex; align-items: center; gap: 0.75rem; }
+.kfold-label { font-size:0.75rem; font-family:'JetBrains Mono',monospace; color:var(--muted); min-width:90px; }
+.kfold-blocks { display: flex; gap: 4px; flex:1; }
+.kfold-block {
+  flex: 1; height: 28px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem; font-weight: 600; font-family:'JetBrains Mono',monospace;
+  transition: all 0.3s;
+}
+.kb-test { background: rgba(245,158,11,0.25); border: 1px solid rgba(245,158,11,0.4); color: var(--accent4); }
+.kb-train { background: rgba(79,142,247,0.1); border: 1px solid rgba(79,142,247,0.2); color: var(--accent1); }
+.kfold-result { font-size:0.75rem; color:var(--muted); font-family:'JetBrains Mono',monospace; }
+
+/* Overfitting/Underfitting visual */
+.fit-cards {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 2rem;
+}
+@media(max-width:640px) { .fit-cards { grid-template-columns: 1fr; } }
+.fit-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; text-align:center;
+}
+.fit-chart { height: 80px; position: relative; display: flex; align-items: flex-end; justify-content: center; gap: 4px; margin-bottom:1rem; padding: 0 0.5rem; }
+.fit-bar { border-radius: 4px 4px 0 0; flex:1; transition: height 0.5s ease; }
+.fit-title { font-family:'Syne',sans-serif; font-weight:700; font-size:0.9rem; }
+.fit-desc { font-size:0.75rem; color:var(--muted); margin-top:0.3rem; }
+.fit-status {
+  display: inline-block; margin-top:0.5rem; padding:0.2rem 0.6rem; border-radius:99px;
+  font-size:0.68rem; font-weight:600; font-family:'JetBrains Mono',monospace;
+}
+.status-bad { background:rgba(239,68,68,0.15); color:var(--danger); }
+.status-good { background:rgba(16,185,129,0.15); color:var(--accent5); }
+
+/* ============================
+   EVALUATION METRICS
+   ============================ */
+#metrics { background: var(--bg); }
+
+/* Confusion matrix */
+.cm-container {
+  display: grid; grid-template-columns: auto 1fr; gap: 2rem; align-items: start;
+  margin-bottom: 2rem;
+}
+@media(max-width:640px) { .cm-container { grid-template-columns: 1fr; } }
+.cm-matrix { }
+.cm-table { border-collapse: separate; border-spacing: 4px; }
+.cm-table td, .cm-table th {
+  padding: 0.85rem 1.1rem; text-align: center; border-radius: 8px; font-size: 0.82rem;
+}
+.cm-label { color:var(--muted); font-size:0.75rem; font-family:'JetBrains Mono',monospace; }
+.cm-axis-label { color:var(--muted); font-size:0.7rem; writing-mode:vertical-rl; transform:rotate(180deg); font-family:'JetBrains Mono',monospace; }
+.cm-tp { background: rgba(16,185,129,0.2); border: 1px solid rgba(16,185,129,0.4); color: #34d399; }
+.cm-tn { background: rgba(16,185,129,0.2); border: 1px solid rgba(16,185,129,0.4); color: #34d399; }
+.cm-fp { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); color: #f87171; }
+.cm-fn { background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.3); color: #fcd34d; }
+.cm-cell-label { font-size:0.62rem; display:block; color:var(--muted); margin-bottom:0.15rem; }
+.cm-cell-val { font-family:'Syne',sans-serif; font-weight:800; font-size:1.3rem; }
+
+.metrics-formulas { display: flex; flex-direction: column; gap: 0.75rem; }
+.metric-row {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem;
+  transition: all 0.3s;
+}
+.metric-row:hover { border-color: rgba(79,142,247,0.3); }
+.metric-name { font-family:'Syne',sans-serif; font-weight:700; font-size:0.9rem; margin-bottom:0.4rem; }
+.metric-formula { font-family:'JetBrains Mono',monospace; font-size:0.8rem; color:var(--muted); }
+.metric-formula .num { color: var(--accent1); }
+.metric-when { font-size: 0.75rem; color: var(--muted); margin-top: 0.35rem; font-style: italic; }
+
+/* Live example */
+.cm-example {
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; margin-top: 2rem;
+}
+.cm-ex-title { font-family:'Syne',sans-serif; font-weight:700; margin-bottom:1.5rem; }
+.cm-ex-grid { display: grid; grid-template-columns: auto 1fr; gap: 2rem; align-items: start; }
+.metrics-result-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 0.75rem; }
+.mr-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem;
+}
+.mr-name { font-size:0.72rem; color:var(--muted); font-family:'JetBrains Mono',monospace; text-transform:uppercase; margin-bottom:0.25rem; }
+.mr-val { font-family:'Syne',sans-serif; font-weight:800; font-size:1.6rem; }
+.mr-formula { font-size:0.7rem; color:var(--muted); margin-top:0.15rem; font-family:'JetBrains Mono',monospace; }
+
+/* ============================
+   REGRESSION METRICS
+   ============================ */
+#regmetrics { background: linear-gradient(180deg, #0a0e1a, #0d1220); }
+
+.reg-metrics-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem;
+}
+@media(max-width:720px) { .reg-metrics-grid { grid-template-columns: 1fr; } }
+
+.rm-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem;
+  position: relative; overflow: hidden;
+}
+.rm-stripe { position: absolute; top:0; left:0; right:0; height:3px; }
+.mae .rm-stripe { background: linear-gradient(90deg,#4f8ef7,#60a5fa); }
+.mse .rm-stripe { background: linear-gradient(90deg,#a855f7,#c084fc); }
+.rmse .rm-stripe { background: linear-gradient(90deg,#10b981,#34d399); }
+.rm-abbr {
+  font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--muted);
+  text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.25rem;
+}
+.rm-name { font-family:'Syne',sans-serif; font-weight:700; font-size:1.05rem; margin-bottom:0.75rem; }
+.rm-formula {
+  background: rgba(255,255,255,0.04); border-radius:8px; padding:0.75rem;
+  font-family:'JetBrains Mono',monospace; font-size:0.8rem; margin-bottom:1rem;
+  border-left:3px solid var(--border);
+}
+.rm-formula.mae { border-color:#4f8ef7; }
+.rm-formula.mse { border-color:#a855f7; }
+.rm-formula.rmse { border-color:#10b981; }
+.rm-desc { font-size:0.84rem; color:var(--muted); }
+.rm-tip { 
+  margin-top: 1rem; padding: 0.6rem 0.85rem; 
+  background: rgba(255,255,255,0.04); border-radius: 8px;
+  font-size: 0.78rem; color: var(--muted);
+}
+.rm-tip strong { color: var(--text); }
+
+/* Worked example table */
+.worked-eg {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+  padding: 2rem; margin-top: 2rem; overflow-x: auto;
+}
+.we-title { font-family:'Syne',sans-serif; font-weight:700; margin-bottom:1.5rem; }
+table.we-table {
+  width: 100%; border-collapse: separate; border-spacing: 0;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;
+}
+.we-table th {
+  background: rgba(255,255,255,0.06); padding: 0.65rem 1rem;
+  text-align: left; color: var(--muted); font-size: 0.7rem; text-transform: uppercase;
+  font-weight: 600; letter-spacing: 0.06em;
+}
+.we-table th:first-child { border-radius: 8px 0 0 8px; }
+.we-table th:last-child { border-radius: 0 8px 8px 0; }
+.we-table td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--border); font-size: 0.82rem; }
+.we-table tr:last-child td { border-bottom: none; }
+.we-table .summary-row td { 
+  background: rgba(79,142,247,0.06); font-weight:600; color:var(--text);
+  border-top: 2px solid rgba(79,142,247,0.3);
+}
+.we-table .highlight { color: var(--accent4); }
+.we-table .pos { color: var(--accent5); }
+.we-table .neg { color: var(--danger); }
+.we-results {
+  display: flex; gap: 1rem; margin-top: 1.25rem; flex-wrap: wrap;
+}
+.we-result-chip {
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 0.75rem 1.25rem;
+}
+.we-result-chip .label { font-size:0.7rem; color:var(--muted); font-family:'JetBrains Mono',monospace; text-transform:uppercase; }
+.we-result-chip .value { font-family:'Syne',sans-serif; font-weight:800; font-size:1.4rem; color:var(--accent1); }
+
+/* ============================
+   CLASSIFICATION METRICS (Full)
+   ============================ */
+#classification { background: var(--bg); }
+
+.email-example {
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 16px;
+  padding: 2rem; margin-bottom: 2rem;
+}
+.ee-title { font-family:'Syne',sans-serif; font-weight:700; margin-bottom:1rem; font-size:1.05rem; }
+.ee-context { font-size:0.85rem; color:var(--muted); margin-bottom:1.25rem; }
+.ee-matrix { margin-bottom: 1.5rem; }
+
+.metrics-detail-grid {
+  display: grid; grid-template-columns: repeat(2,1fr); gap: 1rem;
+}
+@media(max-width:640px) { .metrics-detail-grid { grid-template-columns: 1fr; } }
+
+.md-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem;
+}
+.md-name { font-family:'Syne',sans-serif; font-weight:700; font-size:1rem; margin-bottom:0.5rem; }
+.md-formula {
+  font-family:'JetBrains Mono',monospace; font-size:0.78rem;
+  background: rgba(255,255,255,0.04); padding:0.5rem 0.75rem; border-radius:6px; margin-bottom:0.75rem;
+}
+.md-desc { font-size:0.83rem; color:var(--muted); margin-bottom:0.5rem; }
+.md-calc { font-family:'JetBrains Mono',monospace; font-size:0.8rem; color:var(--accent1); }
+.md-use { font-size:0.78rem; color:var(--muted); margin-top:0.5rem; font-style:italic; }
+
+/* F1 Visual */
+.f1-visual {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; margin-top: 2rem; text-align:center;
+}
+.f1-venn {
+  display: flex; justify-content: center; align-items: center; margin: 1rem 0;
+  height: 120px; position: relative;
+}
+.f1-circle {
+  width: 100px; height: 100px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; font-weight: 600; position: absolute;
+}
+.f1-p { background: rgba(79,142,247,0.25); border: 2px solid rgba(79,142,247,0.5); left: calc(50% - 80px); color: var(--accent1); }
+.f1-r { background: rgba(168,85,247,0.25); border: 2px solid rgba(168,85,247,0.5); left: calc(50% - 20px); color: var(--accent2); }
+.f1-overlap { position:absolute; left:50%; transform:translateX(-50%); font-size:0.65rem; color:#fff; font-weight:700; z-index:1; }
+
+/* ============================
+   QUIZ SECTION
+   ============================ */
+#quiz { background: linear-gradient(180deg, #0a0e1a, #0d1220); }
+
+.quiz-container { max-width: 750px; margin: 0 auto; }
+.quiz-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem;
+}
+.quiz-progress-bar {
+  height: 4px; background: var(--surface2); border-radius: 99px; margin-bottom: 2rem; overflow:hidden;
+}
+.quiz-progress-fill {
+  height: 100%; background: linear-gradient(90deg, var(--accent1), var(--accent2));
+  border-radius: 99px; transition: width 0.4s ease;
+}
+.quiz-q-num { font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--muted); margin-bottom:0.75rem; }
+.quiz-question { font-family:'Syne',sans-serif; font-size:1.15rem; font-weight:700; margin-bottom:1.75rem; line-height:1.4; }
+.quiz-options { display: flex; flex-direction: column; gap: 0.75rem; }
+.quiz-option {
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 10px;
+  padding: 0.9rem 1.25rem; cursor: pointer; transition: all 0.2s;
+  display: flex; align-items: center; gap: 0.75rem; font-size:0.9rem;
+}
+.quiz-option:hover:not(.selected):not(.disabled) { border-color: rgba(79,142,247,0.4); background: rgba(79,142,247,0.06); }
+.quiz-option.correct { border-color: var(--accent5); background: rgba(16,185,129,0.1); }
+.quiz-option.wrong { border-color: var(--danger); background: rgba(239,68,68,0.1); }
+.quiz-option.disabled { pointer-events: none; }
+.opt-letter {
+  width: 28px; height: 28px; border-radius: 8px; background: rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: center; flex-shrink:0;
+  font-family:'JetBrains Mono',monospace; font-size:0.75rem; font-weight:700;
+}
+.quiz-feedback {
+  margin-top: 1.25rem; padding: 1rem 1.25rem; border-radius: 10px;
+  font-size: 0.88rem; display: none;
+}
+.quiz-feedback.show { display: block; }
+.quiz-feedback.good { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); color: #34d399; }
+.quiz-feedback.bad { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #f87171; }
+.quiz-feedback strong { display:block; margin-bottom:0.25rem; font-family:'Syne',sans-serif; }
+.quiz-nav {
+  display: flex; justify-content: space-between; align-items: center; margin-top: 2rem;
+}
+.quiz-score { font-family:'JetBrains Mono',monospace; font-size:0.8rem; color:var(--muted); }
+.quiz-btn {
+  background: var(--accent1); color: #fff; border: none; padding: 0.65rem 1.5rem;
+  border-radius: 8px; font-family:'Syne',sans-serif; font-weight:700; cursor:pointer;
+  font-size:0.9rem; transition: all 0.2s;
+}
+.quiz-btn:hover { background: #3d7de8; transform: translateY(-1px); }
+.quiz-btn:disabled { background: rgba(255,255,255,0.1); color:var(--muted); cursor:not-allowed; transform:none; }
+
+/* ============================
+   AT A GLANCE
+   ============================ */
+#glance { background: var(--bg); }
+
+.glance-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
+}
+@media(max-width:720px) { .glance-grid { grid-template-columns: 1fr; } }
+
+.gl-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem;
+  display: flex; gap: 0.85rem;
+}
+.gl-icon { font-size:1.5rem; flex-shrink:0; }
+.gl-text {}
+.gl-label { font-size:0.7rem; color:var(--muted); font-family:'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.2rem; }
+.gl-fact { font-size:0.85rem; font-weight:500; }
+
+/* ============================
+   SCROLL ANIMATIONS
+   ============================ */
+.reveal {
+  opacity: 0; transform: translateY(30px); transition: all 0.6s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* Footer */
+footer {
+  text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border);
+  color: var(--muted); font-size: 0.82rem;
+}
+footer span { color: var(--accent1); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: rgba(79,142,247,0.3); border-radius: 99px; }
+
+/* Responsive nav */
+@media(max-width:900px) {
+  .nav-links { display: none; }
+  .modules-strip { grid-template-columns: repeat(2,1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">📊 DS Methodology</div>
+  <div class="nav-links">
+    <a href="#pipeline">Pipeline</a>
+    <a href="#analytics">Analytics</a>
+    <a href="#collection">Data</a>
+    <a href="#preparation">Preparation</a>
+    <a href="#validation">Validation</a>
+    <a href="#metrics">Metrics</a>
+    <a href="#regmetrics">Regression</a>
+    <a href="#classification">Classification</a>
+    <a href="#quiz">Quiz</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-orb orb1"></div>
+  <div class="hero-orb orb2"></div>
+  <div class="hero-badge"><span class="badge-dot"></span>Class XII · Touchpad AI · CBSE</div>
+  <h1>Data Science<br><span>Methodology</span></h1>
+  <p>An animated, visual deep-dive into every concept — from the 10-step pipeline to model evaluation metrics. Built to make every topic crystal clear.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><strong>10</strong><span>Pipeline Steps</span></div>
+    <div class="hero-stat"><strong>5</strong><span>Modules</span></div>
+    <div class="hero-stat"><strong>4</strong><span>Analytics Types</span></div>
+    <div class="hero-stat"><strong>6</strong><span>Eval Metrics</span></div>
+  </div>
+</section>
+
+<!-- ===========================
+     SECTION 1: PIPELINE
+     =========================== -->
+<section id="pipeline">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Module Overview</div>
+      <h2 class="section-title">The 10-Step Data Science Pipeline</h2>
+      <p class="section-desc">Introduced by John Rollins (IBM Analytics), this methodology provides a structured, repeatable process for solving any AI/Data Science problem — from business understanding to live feedback loops.</p>
+    </div>
+
+    <div class="reveal pipeline-flow">
+      <div class="pipeline-step s1">
+        <div class="step-box">
+          <div class="step-num">STEP 01</div>
+          <div class="step-icon">🎯</div>
+          <div class="step-name">Business Understanding</div>
+          <div class="step-sub">What is the problem?</div>
+        </div>
+      </div>
+      <div class="pipeline-step s2">
+        <div class="step-box">
+          <div class="step-num">STEP 02</div>
+          <div class="step-icon">🧭</div>
+          <div class="step-name">Analytic Approach</div>
+          <div class="step-sub">How to solve it?</div>
+        </div>
+      </div>
+      <div class="pipeline-step s3">
+        <div class="step-box">
+          <div class="step-num">STEP 03</div>
+          <div class="step-icon">📋</div>
+          <div class="step-name">Data Requirements</div>
+          <div class="step-sub">What data is needed?</div>
+        </div>
+      </div>
+      <div class="pipeline-step s4">
+        <div class="step-box">
+          <div class="step-num">STEP 04</div>
+          <div class="step-icon">🗄️</div>
+          <div class="step-name">Data Collection</div>
+          <div class="step-sub">Gather the data</div>
+        </div>
+      </div>
+      <div class="pipeline-step s5">
+        <div class="step-box">
+          <div class="step-num">STEP 05</div>
+          <div class="step-icon">🔍</div>
+          <div class="step-name">Data Understanding</div>
+          <div class="step-sub">Explore & validate</div>
+        </div>
+      </div>
+      <div class="pipeline-step s6">
+        <div class="step-box">
+          <div class="step-num">STEP 06</div>
+          <div class="step-icon">🧹</div>
+          <div class="step-name">Data Preparation</div>
+          <div class="step-sub">Clean & transform</div>
+        </div>
+      </div>
+      <div class="pipeline-step s7">
+        <div class="step-box">
+          <div class="step-num">STEP 07</div>
+          <div class="step-icon">🤖</div>
+          <div class="step-name">Modelling</div>
+          <div class="step-sub">Build AI models</div>
+        </div>
+      </div>
+      <div class="pipeline-step s8">
+        <div class="step-box">
+          <div class="step-num">STEP 08</div>
+          <div class="step-icon">📏</div>
+          <div class="step-name">Evaluation</div>
+          <div class="step-sub">Test performance</div>
+        </div>
+      </div>
+      <div class="pipeline-step s9">
+        <div class="step-box">
+          <div class="step-num">STEP 09</div>
+          <div class="step-icon">🚀</div>
+          <div class="step-name">Deployment</div>
+          <div class="step-sub">Go live!</div>
+        </div>
+      </div>
+      <div class="pipeline-step s10">
+        <div class="step-box">
+          <div class="step-num">STEP 10</div>
+          <div class="step-icon">🔄</div>
+          <div class="step-name">Feedback</div>
+          <div class="step-sub">Improve continuously</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal modules-strip">
+      <div class="module-card m1">
+        <div class="module-title">Module 1</div>
+        <div style="font-size:0.78rem;color:var(--muted);margin-bottom:0.25rem;">Problem to Approach</div>
+        <div class="module-steps">Steps 1 & 2</div>
+      </div>
+      <div class="module-card m2">
+        <div class="module-title">Module 2</div>
+        <div style="font-size:0.78rem;color:var(--muted);margin-bottom:0.25rem;">Requirements to Collection</div>
+        <div class="module-steps">Steps 3 & 4</div>
+      </div>
+      <div class="module-card m3">
+        <div class="module-title">Module 3</div>
+        <div style="font-size:0.78rem;color:var(--muted);margin-bottom:0.25rem;">Understanding to Preparation</div>
+        <div class="module-steps">Steps 5 & 6</div>
+      </div>
+      <div class="module-card m4">
+        <div class="module-title">Module 4</div>
+        <div style="font-size:0.78rem;color:var(--muted);margin-bottom:0.25rem;">Modelling to Evaluation</div>
+        <div class="module-steps">Steps 7 & 8</div>
+      </div>
+      <div class="module-card m5">
+        <div class="module-title">Module 5</div>
+        <div style="font-size:0.78rem;color:var(--muted);margin-bottom:0.25rem;">Deployment to Feedback</div>
+        <div class="module-steps">Steps 9 & 10</div>
+      </div>
+    </div>
+
+    <!-- Real-world context -->
+    <div class="reveal card" style="margin-top:2rem; background: linear-gradient(135deg, rgba(79,142,247,0.06), rgba(168,85,247,0.06)); border-color: rgba(79,142,247,0.2);">
+      <div style="display:flex;gap:1rem;align-items:flex-start;">
+        <div style="font-size:2rem;">🏪</div>
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.5rem;">Real-World Example: Supermarket Inventory AI</div>
+          <p style="font-size:0.88rem;color:var(--muted);">Imagine Yogendra manages a supermarket chain. He needs an AI model to predict milk demand. The Data Science Methodology guides him: <strong style="color:var(--text)">Step 1</strong> — identify the business problem (stockouts of milk). <strong style="color:var(--text)">Step 4</strong> — collect POS sales records. <strong style="color:var(--text)">Step 7</strong> — build a Linear Regression model. <strong style="color:var(--text)">Step 9</strong> — deploy it to the inventory system. <strong style="color:var(--text)">Step 10</strong> — gather feedback when predictions miss, and retrain.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===========================
+     SECTION 2: ANALYTICS TYPES
+     =========================== -->
+<section id="analytics">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Step 2</div>
+      <h2 class="section-title">4 Types of Data Analytics</h2>
+      <p class="section-desc">Choosing the right analytic approach is the most crucial decision in the pipeline. Each type answers a different question and uses different techniques.</p>
+    </div>
+
+    <div class="analytics-grid reveal">
+      <!-- Descriptive -->
+      <div class="analytics-card ac1">
+        <div class="ac-stripe"></div>
+        <div class="ac-header">
+          <div class="ac-icon">📊</div>
+          <div class="ac-meta">
+            <div class="ac-type">Level 1 · Foundation</div>
+            <div class="ac-name">Descriptive Analytics</div>
+          </div>
+        </div>
+        <div class="ac-question">"What happened?"</div>
+        <div class="ac-desc">Analyses past data to identify trends and patterns. Uses statistics to summarize and visualize historical information. The starting point of all analysis.</div>
+        <div class="ac-tools">
+          <span class="tag">Mean / Median / Mode</span>
+          <span class="tag">Charts & Graphs</span>
+          <span class="tag">Standard Deviation</span>
+          <span class="tag">Data Visualization</span>
+        </div>
+        <div class="ac-example">
+          <div class="example-label">📌 Example</div>
+          A teacher calculates the average marks of all students in a maths test to understand overall class performance.
+        </div>
+      </div>
+
+      <!-- Diagnostic -->
+      <div class="analytics-card ac2">
+        <div class="ac-stripe"></div>
+        <div class="ac-header">
+          <div class="ac-icon">🔎</div>
+          <div class="ac-meta">
+            <div class="ac-type">Level 2 · Deep Dive</div>
+            <div class="ac-name">Diagnostic Analytics</div>
+          </div>
+        </div>
+        <div class="ac-question">"Why did it happen?"</div>
+        <div class="ac-desc">Digs deeper into data to find the root cause of a trend. Uses drill-down analysis and hypothesis testing to explain past events.</div>
+        <div class="ac-tools">
+          <span class="tag">Root Cause Analysis</span>
+          <span class="tag">Hypothesis Testing</span>
+          <span class="tag">Correlation Analysis</span>
+          <span class="tag">Drill-down</span>
+        </div>
+        <div class="ac-example">
+          <div class="example-label">📌 Example</div>
+          A mobile company investigates why sales dropped in one region — finding that a competitor launched a cheaper model at the same time.
+        </div>
+      </div>
+
+      <!-- Predictive -->
+      <div class="analytics-card ac3">
+        <div class="ac-stripe"></div>
+        <div class="ac-header">
+          <div class="ac-icon">🔮</div>
+          <div class="ac-meta">
+            <div class="ac-type">Level 3 · Forward-looking</div>
+            <div class="ac-name">Predictive Analytics</div>
+          </div>
+        </div>
+        <div class="ac-question">"What will happen?"</div>
+        <div class="ac-desc">Uses past data and ML algorithms to predict future outcomes. Builds mathematical models that identify hidden patterns to forecast trends.</div>
+        <div class="ac-tools">
+          <span class="tag">Regression</span>
+          <span class="tag">Classification</span>
+          <span class="tag">Clustering</span>
+          <span class="tag">Decision Trees</span>
+        </div>
+        <div class="ac-example">
+          <div class="example-label">📌 Example</div>
+          A bank predicts which customers are likely to default on a loan based on their credit history, income, and spending patterns.
+        </div>
+      </div>
+
+      <!-- Prescriptive -->
+      <div class="analytics-card ac4">
+        <div class="ac-stripe"></div>
+        <div class="ac-header">
+          <div class="ac-icon">💡</div>
+          <div class="ac-meta">
+            <div class="ac-type">Level 4 · Action-driven</div>
+            <div class="ac-name">Prescriptive Analytics</div>
+          </div>
+        </div>
+        <div class="ac-question">"What should we do?"</div>
+        <div class="ac-desc">The most advanced type. Goes beyond prediction to recommend specific actions. Uses optimisation and simulation to find the best possible decision.</div>
+        <div class="ac-tools">
+          <span class="tag">Optimisation</span>
+          <span class="tag">Simulation</span>
+          <span class="tag">Decision Analysis</span>
+          <span class="tag">AI Recommendations</span>
+        </div>
+        <div class="ac-example">
+          <div class="example-label">📌 Example</div>
+          An airline adjusts ticket prices in real-time based on demand forecasts, competitor pricing, and seat availability to maximise revenue.
+        </div>
+      </div>
+    </div>
+
+    <!-- Progression visual -->
+    <div class="analytics-progression reveal" id="prog-section">
+      <div class="prog-title">Analytics Complexity Progression</div>
+      <div class="prog-bar-wrap">
+        <span class="prog-label">📊 Descriptive</span>
+        <div class="prog-track"><div class="prog-fill pb1"></div></div>
+        <span class="prog-val">Low</span>
+      </div>
+      <div class="prog-bar-wrap">
+        <span class="prog-label">🔎 Diagnostic</span>
+        <div class="prog-track"><div class="prog-fill pb2"></div></div>
+        <span class="prog-val">Medium</span>
+      </div>
+      <div class="prog-bar-wrap">
+        <span class="prog-label">🔮 Predictive</span>
+        <div class="prog-track"><div class="prog-fill pb3"></div></div>
+        <span class="prog-val">High</span>
+      </div>
+      <div class="prog-bar-wrap">
+        <span class="prog-label">💡 Prescriptive</span>
+        <div class="prog-track"><div class="prog-fill pb4"></div></div>
+        <span class="prog-val">Highest</span>
+      </div>
+      <p style="font-size:0.8rem;color:var(--muted);margin-top:1rem;text-align:center;">Each level builds on the previous — you need descriptive insights before you can prescribe actions.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===========================
+     SECTION 3: DATA COLLECTION
+     =========================== -->
+<section id="collection">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Module 2 · Step 4</div>
+      <h2 class="section-title">Data Collection</h2>
+      <p class="section-desc">Data is the fuel of AI. Understanding where data comes from — primary, secondary, or mixed — is essential to ensure the quality and reliability of your model.</p>
+    </div>
+
+    <div class="data-sources reveal">
+      <!-- Primary -->
+      <div class="source-card">
+        <div class="source-badge primary-badge">Primary Data</div>
+        <div class="source-title">Collected First-Hand</div>
+        <p style="font-size:0.84rem;color:var(--muted);margin-bottom:1rem;">Collected directly from original sources. Fresh, raw, and highly accurate. Provides most reliable insights.</p>
+        <ul class="source-list">
+          <li>Forms & Questionnaires</li>
+          <li>Interviews (personal / telephonic)</li>
+          <li>Observations & field research</li>
+          <li>IoT Sensors & Smart Devices</li>
+          <li>Marketing campaigns & feedback</li>
+          <li>Focus groups & oral histories</li>
+        </ul>
+        <div class="ac-example" style="border-color:var(--accent1);margin-top:1rem;">
+          <div class="example-label">📌 Example</div>
+          Yogendra's team conducts a customer satisfaction survey at store entry to collect preferences about product availability.
+        </div>
+      </div>
+
+      <!-- Secondary -->
+      <div class="source-card">
+        <div class="source-badge secondary-badge">Secondary Data</div>
+        <div class="source-title">Pre-existing Information</div>
+        <p style="font-size:0.84rem;color:var(--muted);margin-bottom:1rem;">Data already collected by others. Valuable for research and analysis without direct data collection effort.</p>
+        <ul class="source-list">
+          <li>Books, journals & research papers</li>
+          <li>Websites & online databases (Kaggle, UNICEF)</li>
+          <li>Internal company databases</li>
+          <li>Government & historical records</li>
+          <li>Newspapers & magazines</li>
+          <li>Social media & web scraping</li>
+        </ul>
+        <div class="ac-example" style="border-color:var(--accent2);margin-top:1rem;">
+          <div class="example-label">📌 Example</div>
+          A startup analyses industry reports on consumer behaviour trends to inform their marketing strategy without conducting new surveys.
+        </div>
+      </div>
+
+      <!-- Mixed -->
+      <div class="source-card">
+        <div class="source-badge mixed-badge">Mixed Method</div>
+        <div class="source-title">Best of Both Worlds</div>
+        <p style="font-size:0.84rem;color:var(--muted);margin-bottom:1rem;">Combines primary and secondary data. Provides a well-rounded perspective by combining fresh data with existing information.</p>
+        <ul class="source-list">
+          <li>Online Marketing Analytics</li>
+          <li>Online Tracking (primary: own site; secondary: Google Trends)</li>
+          <li>Combination Research</li>
+          <li>Social Media Monitoring</li>
+        </ul>
+        <div class="ac-example" style="border-color:var(--accent5);margin-top:1rem;">
+          <div class="example-label">📌 Example</div>
+          A company tracks real-time customer feedback (primary) on owned platforms while also using industry reports on consumer trends (secondary) to refine marketing strategy.
+        </div>
+      </div>
+    </div>
+
+    <!-- Data types -->
+    <div class="reveal" style="margin-top:2rem;">
+      <div class="card" style="background:var(--surface2);">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:1.25rem;font-size:1.05rem;">Types of Data Structure</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
+          <div style="background:rgba(79,142,247,0.06);border:1px solid rgba(79,142,247,0.2);border-radius:10px;padding:1.25rem;">
+            <div style="font-weight:700;margin-bottom:0.4rem;color:var(--accent1);">📋 Structured</div>
+            <div style="font-size:0.82rem;color:var(--muted);">Organised in fixed format — rows & columns. Easy to process.<br><br><em>Example: Excel spreadsheet, SQL database, CSV files</em></div>
+          </div>
+          <div style="background:rgba(168,85,247,0.06);border:1px solid rgba(168,85,247,0.2);border-radius:10px;padding:1.25rem;">
+            <div style="font-weight:700;margin-bottom:0.4rem;color:var(--accent2);">📧 Semi-Structured</div>
+            <div style="font-size:0.82rem;color:var(--muted);">Has some organisation but not fully structured. Some flexibility.<br><br><em>Example: Emails, JSON files, XML data</em></div>
+          </div>
+          <div style="background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:10px;padding:1.25rem;">
+            <div style="font-weight:700;margin-bottom:0.4rem;color:var(--accent4);">🖼️ Unstructured</div>
+            <div style="font-size:0.82rem;color:var(--muted);">No set format. Requires advanced processing (NLP, CV).<br><br><em>Example: Social media posts, images, videos, audio</em></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Methods wheel -->
+    <div class="reveal" style="margin-top:2rem;">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:1rem;font-size:1rem;">10 Methods of Data Collection</div>
+      <div class="methods-ring">
+        <div class="method-pill"><div class="method-num">01</div>Forms & Questionnaires</div>
+        <div class="method-pill"><div class="method-num" style="background:#a855f7;">02</div>Interviews</div>
+        <div class="method-pill"><div class="method-num" style="background:#22d3ee;color:#000;">03</div>Observation</div>
+        <div class="method-pill"><div class="method-num" style="background:#f59e0b;color:#000;">04</div>Focus Groups</div>
+        <div class="method-pill"><div class="method-num" style="background:#10b981;color:#000;">05</div>Oral Histories</div>
+        <div class="method-pill"><div class="method-num" style="background:#ef4444;">06</div>Documents & Records</div>
+        <div class="method-pill"><div class="method-num" style="background:#8b5cf6;">07</div>Combination Research</div>
+        <div class="method-pill"><div class="method-num" style="background:#06b6d4;color:#000;">08</div>Online Tracking</div>
+        <div class="method-pill"><div class="method-num" style="background:#84cc16;color:#000;">09</div>Online Marketing Analytics</div>
+        <div class="method-pill"><div class="method-num" style="background:#f43f5e;">10</div>Social Media Monitoring</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===========================
+     SECTION 4: DATA PREPARATION
+     =========================== -->
+<section id="preparation">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Module 3 · Step 6</div>
+      <h2 class="section-title">Data Preparation</h2>
+      <p class="section-desc">Data preparation takes up 80% of a data scientist's time. It transforms raw, messy data into clean, structured data that ML models can learn from effectively.</p>
+    </div>
+
+    <div class="prep-steps reveal">
+      <div class="prep-step">
+        <div class="prep-step-num pn1">01</div>
+        <div class="prep-step-content">
+          <div class="prep-step-title">🧹 Data Cleaning</div>
+          <div class="prep-step-desc">Removing missing values, duplicate entries, and correcting errors. Handles null values through imputation (mean/median) or deletion. Identifies and removes outliers that could skew the model.</div>
+        </div>
+      </div>
+      <div class="prep-connector"></div>
+      <div class="prep-step">
+        <div class="prep-step-num pn2">02</div>
+        <div class="prep-step-content">
+          <div class="prep-step-title">🔗 Data Integration</div>
+          <div class="prep-step-desc">Merging information from different sources into tables, databases, and files. Ensures data from POS systems, supplier databases, and customer feedback forms are combined consistently.</div>
+        </div>
+      </div>
+      <div class="prep-connector"></div>
+      <div class="prep-step">
+        <div class="prep-step-num pn3">03</div>
+        <div class="prep-step-content">
+          <div class="prep-step-title">🔄 Data Transformation</div>
+          <div class="prep-step-desc">Converting raw data into meaningful, usable formats. This includes normalisation (scaling values to 0–1), encoding categorical variables, and standardising date formats across datasets.</div>
+        </div>
+      </div>
+      <div class="prep-connector"></div>
+      <div class="prep-step">
+        <div class="prep-step-num pn4">04</div>
+        <div class="prep-step-content">
+          <div class="prep-step-title">⚙️ Feature Engineering</div>
+          <div class="prep-step-desc">Creating new, more meaningful features from existing data to improve model accuracy. A human-driven process where data scientists decide what transformations to make — the machine decides which to use.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature engineering examples -->
+    <div class="formula-box reveal">
+      <div class="formula-title">🔧 Feature Engineering — Real Examples</div>
+      <div class="formula-eq">
+        <span>Study Hours per Day</span> = Total Study Hours ÷ Days<br>
+        <span>Assignment Rate</span> = Assignments Submitted ÷ Total Assignments × 100<br>
+        <span>Consistency Score</span> = (Attendance % + Assignment Rate) ÷ 2<br>
+        <span>Engagement Score</span> = Weighted combo of attendance, study hours & assignments
+      </div>
+    </div>
+
+    <!-- Brainy fact -->
+    <div class="reveal card" style="margin-top:2rem;background:linear-gradient(135deg,rgba(245,158,11,0.06),rgba(16,185,129,0.06));border-color:rgba(245,158,11,0.2);">
+      <div style="display:flex;gap:0.75rem;">
+        <div style="font-size:1.5rem;">🧠</div>
+        <div>
+          <div style="font-weight:700;margin-bottom:0.4rem;font-family:'Syne',sans-serif;">Brainy Fact — Hurricane Frances (2004)</div>
+          <p style="font-size:0.85rem;color:var(--muted);">During Hurricane Frances, Walmart's automated data analysis systems predicted that strawberry Pop-Tarts would be the best-selling item before the storm — a non-obvious insight that no human manager would have guessed. By stocking these items in advance, they met demand perfectly and avoided stockouts. This real-world case demonstrates the power of data preparation and predictive analytics working together.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===========================
+     SECTION 5: MODEL VALIDATION
+     =========================== -->
+<section id="validation">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Module 4 · Step 8</div>
+      <h2 class="section-title">Model Validation</h2>
+      <p class="section-desc">Model validation is the process of checking how well a trained model performs on new, unseen data — ensuring it generalises correctly to real-world situations, not just the training data.</p>
+    </div>
+
+    <!-- Why validation -->
+    <div class="reveal card" style="margin-bottom:2rem;background:var(--surface2);">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:1rem;">Why Is Model Validation Essential?</div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0.75rem;">
+        <div style="display:flex;gap:0.5rem;align-items:flex-start;">
+          <span style="color:var(--accent5);font-size:1.1rem;">✓</span>
+          <div><strong>Ensures Accuracy</strong><br><span style="font-size:0.82rem;color:var(--muted);">Confirms the model performs well on new data</span></div>
+        </div>
+        <div style="display:flex;gap:0.5rem;align-items:flex-start;">
+          <span style="color:var(--accent5);font-size:1.1rem;">✓</span>
+          <div><strong>Reduces Errors</strong><br><span style="font-size:0.82rem;color:var(--muted);">Identifies potential issues before deployment</span></div>
+        </div>
+        <div style="display:flex;gap:0.5rem;align-items:flex-start;">
+          <span style="color:var(--accent5);font-size:1.1rem;">✓</span>
+          <div><strong>Prevents Overfitting</strong><br><span style="font-size:0.82rem;color:var(--muted);">Balances model complexity and generalisation</span></div>
+        </div>
+        <div style="display:flex;gap:0.5rem;align-items:flex-start;">
+          <span style="color:var(--accent5);font-size:1.1rem;">✓</span>
+          <div><strong>Enhances Real-World Use</strong><br><span style="font-size:0.82rem;color:var(--muted);">Ensures the model is effective in practice</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Overfitting / Underfitting -->
+    <div class="reveal">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:1rem;font-size:1.1rem;">The Goldilocks Problem: Overfitting vs Underfitting</div>
+      <div class="fit-cards">
+        <div class="fit-card">
+          <div class="fit-chart">
+            <div class="fit-bar" style="height:90%;background:rgba(239,68,68,0.3);border:1px solid rgba(239,68,68,0.5);"></div>
+            <div class="fit-bar" style="height:95%;background:rgba(239,68,68,0.3);border:1px solid rgba(239,68,68,0.5);"></div>
+            <div class="fit-bar" style="height:85%;background:rgba(239,68,68,0.3);border:1px solid rgba(239,68,68,0.5);"></div>
+            <div class="fit-bar" style="height:98%;background:rgba(239,68,68,0.3);border:1px solid rgba(239,68,68,0.5);"></div>
+            <div class="fit-bar" style="height:88%;background:rgba(239,68,68,0.3);border:1px solid rgba(239,68,68,0.5);"></div>
+          </div>
+          <div class="fit-title">Overfitting</div>
+          <div class="fit-desc">Model memorises training data including noise. 99% training accuracy, 55% test accuracy.</div>
+          <div class="fit-status status-bad">Too Complex</div>
+        </div>
+        <div class="fit-card" style="border-color:rgba(16,185,129,0.3);">
+          <div class="fit-chart">
+            <div class="fit-bar" style="height:60%;background:rgba(16,185,129,0.3);border:1px solid rgba(16,185,129,0.5);"></div>
+            <div class="fit-bar" style="height:72%;background:rgba(16,185,129,0.3);border:1px solid rgba(16,185,129,0.5);"></div>
+            <div class="fit-bar" style="height:78%;background:rgba(16,185,129,0.3);border:1px solid rgba(16,185,129,0.5);"></div>
+            <div class="fit-bar" style="height:82%;background:rgba(16,185,129,0.3);border:1px solid rgba(16,185,129,0.5);"></div>
+            <div class="fit-bar" style="height:80%;background:rgba(16,185,129,0.3);border:1px solid rgba(16,185,129,0.5);"></div>
+          </div>
+          <div class="fit-title">Perfect Fit ✓</div>
+          <div class="fit-desc">Model learns essential patterns without memorising noise. Generalises well to new data.</div>
+          <div class="fit-status status-good">Just Right</div>
+        </div>
+        <div class="fit-card">
+          <div class="fit-chart">
+            <div class="fit-bar" style="height:30%;background:rgba(168,85,247,0.3);border:1px solid rgba(168,85,247,0.5);"></div>
+            <div class="fit-bar" style="height:28%;background:rgba(168,85,247,0.3);border:1px solid rgba(168,85,247,0.5);"></div>
+            <div class="fit-bar" style="height:32%;background:rgba(168,85,247,0.3);border:1px solid rgba(168,85,247,0.5);"></div>
+            <div class="fit-bar" style="height:29%;background:rgba(168,85,247,0.3);border:1px solid rgba(168,85,247,0.5);"></div>
+            <div class="fit-bar" style="height:31%;background:rgba(168,85,247,0.3);border:1px solid rgba(168,85,247,0.5);"></div>
+          </div>
+          <div class="fit-title">Underfitting</div>
+          <div class="fit-desc">Model is too simple to capture patterns. Low accuracy on both training and test data.</div>
+          <div class="fit-status status-bad">Too Simple</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Train-Test Split vs Cross Validation -->
+    <div class="validation-compare reveal" style="margin-top:2rem;">
+      <div class="vc-card">
+        <div class="vc-badge tts-badge">Method 1</div>
+        <div class="vc-title">🔀 Train-Test Split</div>
+        <p style="font-size:0.85rem;color:var(--muted);margin-bottom:1rem;">Dataset is divided into two parts. Typically 80% training and 20% testing. The model learns from training data, then is evaluated on the test data it has never seen.</p>
+        <div style="background:rgba(79,142,247,0.06);border-radius:8px;padding:0.75rem;font-family:'JetBrains Mono',monospace;font-size:0.78rem;margin-bottom:1rem;">
+          X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        </div>
+        <ul class="vc-pros">
+          <li class="pro">Fast and computationally cheap</li>
+          <li class="pro">Works well for large datasets</li>
+          <li class="con">Single split may be lucky/unlucky</li>
+          <li class="con">Wastes 20% of data for training</li>
+        </ul>
+      </div>
+      <div class="vc-card">
+        <div class="vc-badge cv-badge">Method 2</div>
+        <div class="vc-title">🔁 K-Fold Cross Validation</div>
+        <p style="font-size:0.85rem;color:var(--muted);margin-bottom:1rem;">Dataset split into K equal "folds". Model is trained K times, each time using a different fold as test set and remaining K-1 folds as training. Results are averaged.</p>
+        <ul class="vc-pros">
+          <li class="pro">More reliable — every data point used for testing</li>
+          <li class="pro">Better for small datasets</li>
+          <li class="pro">Reduces variance of evaluation</li>
+          <li class="con">Computationally expensive (K× slower)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- K-Fold visual -->
+    <div class="kfold-visual reveal">
+      <div class="kfold-title">K-Fold Cross Validation — Visual (K=5)</div>
+      <div class="kfold-grid">
+        <div class="kfold-row">
+          <span class="kfold-label">Iteration 1</span>
+          <div class="kfold-blocks">
+            <div class="kfold-block kb-test">TEST</div>
+            <div class="kfold-block kb-train">TRAIN</div>
+            <div class="kfold-block kb-train">TRAIN</div>
+            <div class="kfold-block kb-train">TRAIN</div>
+            <div class="kfold-block kb-train">TRAIN</div>
+          </div>
+          <span class="kfold-result">Acc₁</span>
+        </div>
+        <div class="kfold-row">
+          <span class="kfold-label">Iteration 2</span>
+          <div class="kfold-blocks">
+            <div class="kfold-block kb-train">TRAIN</div>
+            <div class="kfold-block kb-test">TEST</div>
+            <div class="kfold-block kb-train">TRAIN</div>
+            <div class="kfold-block kb-train">TRAIN</div>
+            <div class="kfold-block kb-train">TRAIN</div>
+          </div>
+          <span class="kfold-result">Acc₂</span>
+        </div>
+        <div class="kfold-row">
+          <span class="kfold-label">Iteration 3</span>
+          <div class="kfold-blocks">
+            <div class="kfold-block kb-train">TRAIN</div>
+            <div class="kfold-block kb-train">TRAIN</div>
+            <div class="kfold-block kb-test">TEST</div>
+            <div class="kfold-block kb-train">TRAIN</div>
+            <div class="kfold-block kb-train">TRAIN</div>
+          </div>
+          <span class="kfold-result">Acc₃</span>
+        </div>
+        <div class="kfold-row">
+          <span class="kfold-label">Iteration 4</span>
+          <div class="kfold-blocks">
+            <div class="kfold-block kb-train">TRAIN</div>
+            <div class="kfold-block kb-train">TRAIN</div>
+            <div class="kfold-block kb-train">TRAIN</div>
+            <div class="kfold-block kb-test">TEST</div>
+            <div class="kfold-block kb-train">TRAIN</div>
+          </div>
+          <span class="kfold-result">Acc₄</span>
+        </div>
+        <div class="kfold-row">
+          <span class="kfold-label">Iteration 5</span>
+          <div class="kfold-blocks">
+            <div class="kfold-block kb-train">TRAIN</div>
+            <div class="kfold-block kb-train">TRAIN</div>
+            <div class="kfold-block kb-train">TRAIN</div>
+            <div class="kfold-block kb-train">TRAIN</div>
+            <div class="kfold-block kb-test">TEST</div>
+          </div>
+          <span class="kfold-result">Acc₅</span>
+        </div>
+        <div class="kfold-row" style="padding-top:0.75rem;border-top:1px solid var(--border);">
+          <span class="kfold-label" style="color:var(--accent1);font-weight:600;">Final Score</span>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--text);">Average(Acc₁, Acc₂, Acc₃, Acc₄, Acc₅)</div>
+          <span class="kfold-result" style="color:var(--accent1);">Avg</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===========================
+     SECTION 6: EVALUATION METRICS (Regression)
+     =========================== -->
+<section id="regmetrics">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Module 4 · Regression Evaluation</div>
+      <h2 class="section-title">Regression Evaluation Metrics</h2>
+      <p class="section-desc">When predicting continuous values (like house prices, temperature, or exam scores), these three metrics tell us how far off our predictions are from the actual values.</p>
+    </div>
+
+    <div class="reg-metrics-grid reveal">
+      <!-- MAE -->
+      <div class="rm-card mae">
+        <div class="rm-stripe"></div>
+        <div class="rm-abbr">MAE</div>
+        <div class="rm-name">Mean Absolute Error</div>
+        <div class="rm-formula mae">MAE = Σ|Predicted − Actual| / n</div>
+        <div class="rm-desc">Calculates the average of the absolute differences between predicted and actual values. Each error is treated equally — simple and interpretable.</div>
+        <div class="rm-tip"><strong>A MAE of 0</strong> means perfect predictions. The higher the MAE, the less accurate the model. Unit is same as target variable.</div>
+      </div>
+
+      <!-- MSE -->
+      <div class="rm-card mse">
+        <div class="rm-stripe"></div>
+        <div class="rm-abbr">MSE</div>
+        <div class="rm-name">Mean Squared Error</div>
+        <div class="rm-formula mse">MSE = Σ(Predicted − Actual)² / n</div>
+        <div class="rm-desc">Squares the errors before averaging. Large errors are penalised much more heavily than small ones. Most widely used regression metric.</div>
+        <div class="rm-tip"><strong>MSE penalises outliers</strong> — a prediction off by 10 contributes 100 to MSE, while one off by 1 contributes only 1. Use when large errors are especially costly.</div>
+      </div>
+
+      <!-- RMSE -->
+      <div class="rm-card rmse">
+        <div class="rm-stripe"></div>
+        <div class="rm-abbr">RMSE</div>
+        <div class="rm-name">Root Mean Squared Error</div>
+        <div class="rm-formula rmse">RMSE = √(Σ(Predicted − Actual)² / n)</div>
+        <div class="rm-desc">Square root of MSE. Brings the error back to the same unit as the original data, making it interpretable. Often preferred over MSE for reporting.</div>
+        <div class="rm-tip"><strong>RMSE is always ≥ MAE.</strong> A lower RMSE means better model performance. Often preferred when you want an error in the same units as predictions.</div>
+      </div>
+    </div>
+
+    <!-- Worked example -->
+    <div class="worked-eg reveal">
+      <div class="we-title">📌 Worked Example: House Price Prediction</div>
+      <p style="font-size:0.85rem;color:var(--muted);margin-bottom:1.25rem;">Regression equation: ŷ = 0.5x + 3.7 &nbsp;·&nbsp; Dataset has 5 houses</p>
+      <table class="we-table">
+        <thead>
+          <tr>
+            <th>x (SAT/Size)</th>
+            <th>y (Actual)</th>
+            <th>ŷ (Predicted)</th>
+            <th>Residual (ŷ − y)</th>
+            <th>|Residual|</th>
+            <th>Residual²</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>20</td><td>22</td><td class="highlight">0.5×20+3.7 = 13.7</td><td class="neg">−8.3</td><td>8.3</td><td class="highlight">68.89</td></tr>
+          <tr><td>22</td><td>26</td><td class="highlight">0.5×22+3.7 = 14.7</td><td class="neg">−11.3</td><td>11.3</td><td class="highlight">127.69</td></tr>
+          <tr><td>26</td><td>31</td><td class="highlight">0.5×26+3.7 = 16.7</td><td class="neg">−14.3</td><td>14.3</td><td class="highlight">204.49</td></tr>
+          <tr><td>28</td><td>28</td><td class="highlight">0.5×28+3.7 = 17.7</td><td class="neg">−10.3</td><td>10.3</td><td class="highlight">106.09</td></tr>
+          <tr><td>25</td><td>20</td><td class="highlight">0.5×25+3.7 = 16.2</td><td class="pos">+3.8</td><td>3.8</td><td class="highlight">14.44</td></tr>
+          <tr class="summary-row">
+            <td colspan="4" style="text-align:right;font-weight:700;">Sum of Squared Residuals →</td>
+            <td class="highlight">48.0 (MAE numerator)</td>
+            <td class="highlight">521.6 (MSE numerator)</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="we-results">
+        <div class="we-result-chip">
+          <div class="label">MAE</div>
+          <div class="value" style="color:var(--accent1);">9.6</div>
+          <div class="mr-formula">48.0 ÷ 5 = 9.6</div>
+        </div>
+        <div class="we-result-chip">
+          <div class="label">MSE</div>
+          <div class="value" style="color:var(--accent2);">104.32</div>
+          <div class="mr-formula">521.6 ÷ 5 = 104.32</div>
+        </div>
+        <div class="we-result-chip">
+          <div class="label">RMSE</div>
+          <div class="value" style="color:var(--accent5);">10.21</div>
+          <div class="mr-formula">√104.32 ≈ 10.21</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===========================
+     SECTION 7: CLASSIFICATION METRICS
+     =========================== -->
+<section id="classification">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Module 4 · Classification Evaluation</div>
+      <h2 class="section-title">Classification Evaluation Metrics</h2>
+      <p class="section-desc">When predicting categories (spam/not spam, disease/healthy, fraud/genuine), these metrics evaluate how well the model sorts data into the correct class.</p>
+    </div>
+
+    <!-- Confusion Matrix intro -->
+    <div class="reveal" style="margin-bottom:2rem;">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:1rem;">Step 1: Build the Confusion Matrix</div>
+      <div class="cm-container">
+        <div class="cm-matrix">
+          <table class="cm-table">
+            <thead>
+              <tr>
+                <td></td>
+                <td></td>
+                <td colspan="2" style="text-align:center;font-family:'Syne',sans-serif;font-weight:700;font-size:0.85rem;color:var(--text);">PREDICTION</td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td class="cm-label">Positive (Spam)</td>
+                <td class="cm-label">Negative (Not Spam)</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td rowspan="2" class="cm-axis-label">REALITY</td>
+                <td class="cm-label">Positive</td>
+                <td class="cm-tp">
+                  <span class="cm-cell-label">True Positive</span>
+                  <span class="cm-cell-val">TP</span>
+                </td>
+                <td class="cm-fn">
+                  <span class="cm-cell-label">False Negative</span>
+                  <span class="cm-cell-val">FN</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="cm-label">Negative</td>
+                <td class="cm-fp">
+                  <span class="cm-cell-label">False Positive</span>
+                  <span class="cm-cell-val">FP</span>
+                </td>
+                <td class="cm-tn">
+                  <span class="cm-cell-label">True Negative</span>
+                  <span class="cm-cell-val">TN</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="margin-top:1rem;display:grid;gap:0.5rem;">
+            <div style="font-size:0.78rem;color:var(--accent5);">✅ TP: Correctly predicted POSITIVE</div>
+            <div style="font-size:0.78rem;color:var(--accent5);">✅ TN: Correctly predicted NEGATIVE</div>
+            <div style="font-size:0.78rem;color:var(--danger);">❌ FP: Predicted positive, actually NEGATIVE (Type I Error)</div>
+            <div style="font-size:0.78rem;color:var(--accent4);">⚠️ FN: Predicted negative, actually POSITIVE (Type II Error)</div>
+          </div>
+        </div>
+        <div class="metrics-formulas">
+          <div class="metric-row">
+            <div class="metric-name">🎯 Accuracy</div>
+            <div class="metric-formula"><span class="num">(TP + TN)</span> / (TP + TN + FP + FN)</div>
+            <div class="metric-when">Use when classes are balanced. Can be misleading with imbalanced data.</div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-name">🔬 Precision</div>
+            <div class="metric-formula"><span class="num">TP</span> / (TP + FP)</div>
+            <div class="metric-when">Use when False Positives are costly (e.g., spam filter incorrectly blocking important emails).</div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-name">📡 Recall (Sensitivity)</div>
+            <div class="metric-formula"><span class="num">TP</span> / (TP + FN)</div>
+            <div class="metric-when">Use when False Negatives are costly (e.g., missing a cancer diagnosis).</div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-name">⚖️ F1-Score</div>
+            <div class="metric-formula">2 × <span class="num">(Precision × Recall)</span> / (Precision + Recall)</div>
+            <div class="metric-when">Use when you need a balance between Precision and Recall. Best for imbalanced datasets.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Full worked example: spam email -->
+    <div class="email-example reveal">
+      <div class="ee-title">📌 Full Worked Example: Spam Email Detection</div>
+      <div class="ee-context">A model classifies 200 emails (100 spam, 100 genuine). Results: TP=59, TN=25, FP=21, FN=25, TN=70 (note: corrected to TP=59, FP=21, FN=25, TN=95 for 200 total)</div>
+      
+      <!-- Actual confusion matrix -->
+      <div style="margin-bottom:1.5rem;overflow-x:auto;">
+        <table class="cm-table" style="max-width:500px;">
+          <thead>
+            <tr><td></td><td></td><td class="cm-label">Predicted: Spam</td><td class="cm-label">Predicted: Not Spam</td></tr>
+          </thead>
+          <tbody>
+            <tr><td class="cm-axis-label" rowspan="2">Actual</td><td class="cm-label">Spam</td><td class="cm-tp"><span class="cm-cell-label">TP</span><span class="cm-cell-val">59</span></td><td class="cm-fn"><span class="cm-cell-label">FN</span><span class="cm-cell-val">21</span></td></tr>
+            <tr><td class="cm-label">Not Spam</td><td class="cm-fp"><span class="cm-cell-label">FP</span><span class="cm-cell-val">25</span></td><td class="cm-tn"><span class="cm-cell-label">TN</span><span class="cm-cell-val">95</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="metrics-detail-grid">
+        <div class="md-card">
+          <div class="md-name">🎯 Accuracy</div>
+          <div class="md-formula">(TP + TN) / Total</div>
+          <div class="md-desc">Overall correct predictions out of all predictions.</div>
+          <div class="md-calc">= (59+95)/200 = 154/200 = <strong>0.77 = 77%</strong></div>
+          <div class="md-use">Interpretation: The model correctly classified 77% of all emails.</div>
+        </div>
+        <div class="md-card">
+          <div class="md-name">🔬 Precision</div>
+          <div class="md-formula">TP / (TP + FP)</div>
+          <div class="md-desc">Of all emails predicted as spam, how many truly were spam?</div>
+          <div class="md-calc">= 59/(59+25) = 59/84 = <strong>0.702 ≈ 70%</strong></div>
+          <div class="md-use">Interpretation: When the model says "spam", it's right 70% of the time.</div>
+        </div>
+        <div class="md-card">
+          <div class="md-name">📡 Recall</div>
+          <div class="md-formula">TP / (TP + FN)</div>
+          <div class="md-desc">Of all actual spam emails, how many did the model catch?</div>
+          <div class="md-calc">= 59/(59+21) = 59/80 = <strong>0.7375 ≈ 74%</strong></div>
+          <div class="md-use">Interpretation: The model detected 74% of all actual spam emails.</div>
+        </div>
+        <div class="md-card">
+          <div class="md-name">⚖️ F1-Score</div>
+          <div class="md-formula">2 × (P × R) / (P + R)</div>
+          <div class="md-desc">Harmonic mean of Precision and Recall. Balanced metric.</div>
+          <div class="md-calc">= 2×(0.70×0.74)/(0.70+0.74) = <strong>0.719 ≈ 72%</strong></div>
+          <div class="md-use">Interpretation: Balanced score — the model has good but not great overall classification performance.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key insight cards -->
+    <div class="reveal" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2rem;">
+      <div class="card" style="background:rgba(239,68,68,0.06);border-color:rgba(239,68,68,0.2);">
+        <div style="font-weight:700;margin-bottom:0.5rem;color:#f87171;">High Precision, Low Recall</div>
+        <div style="font-size:0.82rem;color:var(--muted);">F1 score is LOW. The model is cautious — only labels something spam when very sure, but misses many actual spam emails.</div>
+      </div>
+      <div class="card" style="background:rgba(16,185,129,0.06);border-color:rgba(16,185,129,0.2);">
+        <div style="font-weight:700;margin-bottom:0.5rem;color:#34d399;">Both High</div>
+        <div style="font-size:0.82rem;color:var(--muted);">F1 approaches 1.0 — this is the ideal scenario. The model correctly identifies spam and does not miss actual spam.</div>
+      </div>
+      <div class="card" style="background:rgba(245,158,11,0.06);border-color:rgba(245,158,11,0.2);">
+        <div style="font-weight:700;margin-bottom:0.5rem;color:#fcd34d;">Low Precision, High Recall</div>
+        <div style="font-size:0.82rem;color:var(--muted);">Model flags everything as spam. Catches all real spam but also blocks many genuine emails (too many false alarms).</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===========================
+     AT A GLANCE
+     =========================== -->
+<section id="glance">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Quick Reference</div>
+      <h2 class="section-title">Key Concepts at a Glance</h2>
+      <p class="section-desc">Everything you need to remember — condensed into rapid-recall cards.</p>
+    </div>
+
+    <div class="glance-grid reveal">
+      <div class="gl-card"><div class="gl-icon">🎯</div><div class="gl-text"><div class="gl-label">Pipeline Steps</div><div class="gl-fact">10 steps introduced by John Rollins (IBM Analytics)</div></div></div>
+      <div class="gl-card"><div class="gl-icon">📦</div><div class="gl-text"><div class="gl-label">Pipeline Modules</div><div class="gl-fact">5 modules, each covering 2 consecutive steps</div></div></div>
+      <div class="gl-card"><div class="gl-icon">📊</div><div class="gl-text"><div class="gl-label">Descriptive Analytics</div><div class="gl-fact">"What happened?" — uses mean, charts, historical data</div></div></div>
+      <div class="gl-card"><div class="gl-icon">🔎</div><div class="gl-text"><div class="gl-label">Diagnostic Analytics</div><div class="gl-fact">"Why did it happen?" — root cause, hypothesis testing</div></div></div>
+      <div class="gl-card"><div class="gl-icon">🔮</div><div class="gl-text"><div class="gl-label">Predictive Analytics</div><div class="gl-fact">"What will happen?" — regression, classification</div></div></div>
+      <div class="gl-card"><div class="gl-icon">💡</div><div class="gl-text"><div class="gl-label">Prescriptive Analytics</div><div class="gl-fact">"What should we do?" — optimisation, simulation</div></div></div>
+      <div class="gl-card"><div class="gl-icon">🗄️</div><div class="gl-text"><div class="gl-label">Primary Data</div><div class="gl-fact">Collected first-hand directly from original source</div></div></div>
+      <div class="gl-card"><div class="gl-icon">📚</div><div class="gl-text"><div class="gl-label">Secondary Data</div><div class="gl-fact">Pre-existing data from books, databases, reports</div></div></div>
+      <div class="gl-card"><div class="gl-icon">⏱️</div><div class="gl-text"><div class="gl-label">Data Preparation</div><div class="gl-fact">Takes ~80% of total time in a data science project</div></div></div>
+      <div class="gl-card"><div class="gl-icon">📏</div><div class="gl-text"><div class="gl-label">MAE</div><div class="gl-fact">Mean Absolute Error: Σ|ŷ−y|/n — simple, same unit</div></div></div>
+      <div class="gl-card"><div class="gl-icon">📐</div><div class="gl-text"><div class="gl-label">MSE</div><div class="gl-fact">Squares errors — heavily penalises large outliers</div></div></div>
+      <div class="gl-card"><div class="gl-icon">√</div><div class="gl-text"><div class="gl-label">RMSE</div><div class="gl-fact">√MSE — interpretable, same units as target variable</div></div></div>
+      <div class="gl-card"><div class="gl-icon">✅</div><div class="gl-text"><div class="gl-label">Accuracy</div><div class="gl-fact">(TP+TN)/Total — good for balanced datasets</div></div></div>
+      <div class="gl-card"><div class="gl-icon">🎯</div><div class="gl-text"><div class="gl-label">Precision</div><div class="gl-fact">TP/(TP+FP) — minimise false alarms (spam filter)</div></div></div>
+      <div class="gl-card"><div class="gl-icon">📡</div><div class="gl-text"><div class="gl-label">Recall</div><div class="gl-fact">TP/(TP+FN) — minimise missed positives (cancer)</div></div></div>
+      <div class="gl-card"><div class="gl-icon">⚖️</div><div class="gl-text"><div class="gl-label">F1-Score</div><div class="gl-fact">Harmonic mean of Precision & Recall — balanced</div></div></div>
+      <div class="gl-card"><div class="gl-icon">🔀</div><div class="gl-text"><div class="gl-label">Train-Test Split</div><div class="gl-fact">Usually 80% training, 20% testing (large datasets)</div></div></div>
+      <div class="gl-card"><div class="gl-icon">🔁</div><div class="gl-text"><div class="gl-label">K-Fold CV</div><div class="gl-fact">K iterations, each using different fold as test set</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===========================
+     QUIZ SECTION
+     =========================== -->
+<section id="quiz">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Test Yourself</div>
+      <h2 class="section-title">Practice Quiz</h2>
+      <p class="section-desc">Competency-based questions modelled on the CBSE board exam pattern. Let's see how much you've learned!</p>
+    </div>
+
+    <div class="quiz-container reveal">
+      <div class="quiz-card">
+        <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quizBar" style="width:10%"></div></div>
+        <div class="quiz-q-num" id="qNum">Question 1 of 10</div>
+        <div class="quiz-question" id="qText"></div>
+        <div class="quiz-options" id="qOptions"></div>
+        <div class="quiz-feedback" id="qFeedback"></div>
+        <div class="quiz-nav">
+          <div class="quiz-score" id="qScore">Score: 0 / 0</div>
+          <button class="quiz-btn" id="nextBtn" onclick="nextQuestion()" disabled>Next →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Built for <span>Class XII · Data Science Methodology</span> · CBSE Board</p>
+  <p style="margin-top:0.5rem;">Touchpad Artificial Intelligence · An Analytic Approach to Capstone Project</p>
+</footer>
+
+<script>
+// ===========================
+// SCROLL REVEAL
+// ===========================
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+revealEls.forEach(el => observer.observe(el));
+
+// Animate progress bars when visible
+const progSection = document.getElementById('prog-section');
+const progObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      document.querySelectorAll('.prog-fill').forEach(bar => bar.classList.add('animated'));
+    }
+  });
+}, { threshold: 0.3 });
+if (progSection) progObserver.observe(progSection);
+
+// ===========================
+// QUIZ ENGINE
+// ===========================
+const questions = [
+  {
+    q: "Which module of the Data Science Methodology emphasises 'From Problem to Approach'?",
+    opts: ["Module 2","Module 1","Module 3","Module 5"],
+    answer: 1,
+    feedback: "Module 1 covers Steps 1 (Business Understanding) and 2 (Analytic Approach) — the very beginning of the pipeline where you define the problem and decide how to solve it."
+  },
+  {
+    q: "A supermarket wants to know WHY milk sales dropped last month. Which type of analytics should they use?",
+    opts: ["Descriptive Analytics","Predictive Analytics","Diagnostic Analytics","Prescriptive Analytics"],
+    answer: 2,
+    feedback: "Diagnostic Analytics answers 'Why did it happen?' Using root cause analysis and hypothesis testing to find the reason behind the sales drop."
+  },
+  {
+    q: "In a Confusion Matrix, a model predicts cancer positive but the patient is actually healthy. This is a:",
+    opts: ["True Positive (TP)","True Negative (TN)","False Positive (FP) — Type I Error","False Negative (FN) — Type II Error"],
+    answer: 2,
+    feedback: "A False Positive (FP) occurs when the model predicts POSITIVE but the reality is NEGATIVE. It is also called Type I Error. In medical contexts, this means unnecessary worry but is less dangerous than False Negatives."
+  },
+  {
+    q: "A cancer detection model should prioritise which metric to minimise missed diagnoses?",
+    opts: ["Accuracy","Precision","F1-Score","Recall (Sensitivity)"],
+    answer: 3,
+    feedback: "Recall (= TP / TP+FN) maximises the detection of actual positive cases. Missing a cancer patient (FN) is far more dangerous than a false alarm, so Recall is the priority metric in medical diagnosis."
+  },
+  {
+    q: "Which formula correctly represents the F1-Score?",
+    opts: ["(TP+TN) / Total","2 × (Precision × Recall) / (Precision + Recall)","TP / (TP + FP)","√(Σ(Predicted−Actual)² / n)"],
+    answer: 1,
+    feedback: "F1-Score = 2 × (Precision × Recall) / (Precision + Recall). It is the harmonic mean of Precision and Recall — most useful when you need a balance between the two, especially with imbalanced datasets."
+  },
+  {
+    q: "In K-Fold Cross Validation with K=5, the dataset is divided into 5 equal parts. How many times is the model trained?",
+    opts: ["1 time","3 times","5 times","10 times"],
+    answer: 2,
+    feedback: "With K=5 folds, the model is trained 5 times. Each time, a different fold acts as the test set while the remaining 4 folds form the training set. Final accuracy is the average of all 5 runs."
+  },
+  {
+    q: "Data collected directly from original sources (like surveys and interviews) is called:",
+    opts: ["Secondary Data","Tertiary Data","Primary Data","Mixed Data"],
+    answer: 2,
+    feedback: "Primary Data is collected directly from original sources. It is fresh, raw, and highly accurate. Examples include forms, questionnaires, interviews, observations, and IoT sensor readings."
+  },
+  {
+    q: "RMSE differs from MSE in that it:",
+    opts: ["Squares the errors","Averages absolute values","Takes the square root, making units interpretable","Ignores outliers"],
+    answer: 2,
+    feedback: "RMSE = √MSE. Taking the square root brings the metric back to the same units as the target variable (e.g., ₹ for price, °C for temperature), making it far more interpretable than MSE for reporting."
+  },
+  {
+    q: "Feature Engineering is a process where:",
+    opts: ["The machine automatically selects features","Data scientists create new meaningful features from existing data","Raw data is cleaned of duplicates","Models are deployed to production"],
+    answer: 1,
+    feedback: "Feature Engineering is a human-driven process in Step 6 (Data Preparation) where data scientists decide WHAT new features to create from existing data (e.g., creating 'Assignment Rate' from submissions and total assignments). The machine then decides WHICH features to use."
+  },
+  {
+    q: "A model has Precision = 0.88 and Recall = 0.70. Calculate its F1-Score (approx).",
+    opts: ["0.78","0.79","0.85","0.70"],
+    answer: 1,
+    feedback: "F1 = 2 × (0.88 × 0.70) / (0.88 + 0.70) = 2 × 0.616 / 1.58 = 1.232 / 1.58 ≈ 0.78. The F1-score is always between Precision and Recall, closer to whichever is lower."
+  }
+];
+
+let current = 0, score = 0, answered = 0;
+
+function loadQuestion() {
+  const q = questions[current];
+  document.getElementById('qNum').textContent = `Question ${current+1} of ${questions.length}`;
+  document.getElementById('qText').textContent = q.q;
+  document.getElementById('quizBar').style.width = `${((current+1)/questions.length)*100}%`;
+  
+  const opts = document.getElementById('qOptions');
+  opts.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  q.opts.forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'quiz-option';
+    div.innerHTML = `<div class="opt-letter">${letters[i]}</div><span>${opt}</span>`;
+    div.onclick = () => selectAnswer(i, div);
+    opts.appendChild(div);
+  });
+  
+  document.getElementById('qFeedback').className = 'quiz-feedback';
+  document.getElementById('qFeedback').innerHTML = '';
+  document.getElementById('nextBtn').disabled = true;
+  document.getElementById('qScore').textContent = `Score: ${score} / ${answered}`;
+}
+
+function selectAnswer(idx, el) {
+  const q = questions[current];
+  document.querySelectorAll('.quiz-option').forEach(o => o.classList.add('disabled'));
+  
+  const feedback = document.getElementById('qFeedback');
+  answered++;
+  
+  if (idx === q.answer) {
+    el.classList.add('correct');
+    score++;
+    feedback.className = 'quiz-feedback good show';
+    feedback.innerHTML = `<strong>✓ Correct!</strong>${q.feedback}`;
+  } else {
+    el.classList.add('wrong');
+    document.querySelectorAll('.quiz-option')[q.answer].classList.add('correct');
+    feedback.className = 'quiz-feedback bad show';
+    feedback.innerHTML = `<strong>✗ Incorrect.</strong>${q.feedback}`;
+  }
+  
+  document.getElementById('qScore').textContent = `Score: ${score} / ${answered}`;
+  document.getElementById('nextBtn').disabled = false;
+  
+  if (current === questions.length - 1) {
+    document.getElementById('nextBtn').textContent = 'See Results';
+  }
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= questions.length) {
+    showResults();
+    return;
+  }
+  loadQuestion();
+}
+
+function showResults() {
+  const pct = Math.round((score/questions.length)*100);
+  const grade = pct >= 90 ? '🌟 Outstanding!' : pct >= 70 ? '✅ Good Job!' : pct >= 50 ? '📚 Keep Studying' : '💪 Try Again!';
+  const card = document.querySelector('.quiz-card');
+  card.innerHTML = `
+    <div style="text-align:center;padding:1rem 0;">
+      <div style="font-size:3rem;margin-bottom:1rem;">${pct>=70?'🏆':'📖'}</div>
+      <div style="font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;margin-bottom:0.5rem;">${grade}</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:1.1rem;color:var(--accent1);margin-bottom:1rem;">${score} / ${questions.length} correct (${pct}%)</div>
+      <div style="font-size:0.88rem;color:var(--muted);max-width:400px;margin:0 auto 2rem;">
+        ${pct>=80?'Excellent understanding of Data Science Methodology! You are well-prepared for the exam.':pct>=60?'Good grasp of the concepts. Review the sections you got wrong and retake the quiz.':'Go back through the notes above, especially Evaluation Metrics and Analytics Types, then try again.'}
+      </div>
+      <button class="quiz-btn" onclick="restartQuiz()" style="padding:0.75rem 2rem;font-size:1rem;">
+        🔄 Retake Quiz
+      </button>
+    </div>
+  `;
+}
+
+function restartQuiz() {
+  current = 0; score = 0; answered = 0;
+  document.querySelector('.quiz-card').innerHTML = `
+    <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quizBar" style="width:10%"></div></div>
+    <div class="quiz-q-num" id="qNum"></div>
+    <div class="quiz-question" id="qText"></div>
+    <div class="quiz-options" id="qOptions"></div>
+    <div class="quiz-feedback" id="qFeedback"></div>
+    <div class="quiz-nav">
+      <div class="quiz-score" id="qScore">Score: 0 / 0</div>
+      <button class="quiz-btn" id="nextBtn" onclick="nextQuestion()" disabled>Next →</button>
+    </div>
+  `;
+  loadQuestion();
+}
+
+loadQuestion();
+</script>
+</body>
+</html>
