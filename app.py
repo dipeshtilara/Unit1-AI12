@@ -21,7 +21,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Read the HTML content
-with open("data_science_methodology.html", "r", encoding="utf-8") as file:
+with open("data_science_methodology.html_7", "r", encoding="utf-8") as file:
     source_html = file.read()
 
 # Display the custom HTML in Streamlit
